@@ -10,6 +10,10 @@ import java.lang.reflect.Type
 
 class Server {
 
+    companion object {
+        private const val DISCORD_INVITE = "https://discord.com/invite/zMKEAhHHac"
+    }
+
     private lateinit var internalServer: Javalin
 
     private val gsonMapper = object : JsonMapper {
@@ -35,6 +39,9 @@ class Server {
             // Serve all files in your static directory
             config.staticFiles.add(cfg.staticFilesDirectory, Location.EXTERNAL)
         }
+            // Handle discord redirects here instead of in the frontend
+            .get("/chat") { ctx -> ctx.redirect(DISCORD_INVITE) }
+            .get("/discord") { ctx -> ctx.redirect(DISCORD_INVITE) }
             .get("/api/news/{id}") { ctx ->
                 val id = ctx.pathParam("id")
                 val newsPost = NewsManager.getNewsPost(id)
