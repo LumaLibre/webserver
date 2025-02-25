@@ -2,47 +2,84 @@ package net.lumamc.web.news
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import java.io.File
-import java.net.URL
-import java.time.LocalDateTime
+import com.google.gson.TypeAdapter
+import com.google.gson.stream.JsonReader
+import com.google.gson.stream.JsonWriter
+import net.lumamc.web.Util
+import net.lumamc.web.configuration.sector.NewsArticle
+import java.nio.file.Path
 
 class NewsPost(
     val title: String,
-    val thumbnail: URL,
+    val thumbnail: String,
     val author: String,
-    val date: LocalDateTime,
-    val content: File
+    val timestamp: Long,
+    val content: String
 ) {
 
     companion object {
-        private val gson: Gson = GsonBuilder().setPrettyPrinting().create()
-    }
 
-    fun toSimpleObject(): SimpleNewsPost {
-        val simple = SimpleNewsPost(
-            title,
-            thumbnail.toExternalForm(),
-            author,
-            date.toString(),
-            content.readText()
-        )
-        return simple
+        fun fromNewsArticle(newsArticle: NewsArticle): NewsPost {
+            val content = Path.of(newsArticle.contentPath).toFile()
+            if (!content.exists()) {
+                // create directory if it doesn't exist
+                content.parentFile.mkdirs()
+                content.createNewFile()
+                content.writeText("# ${newsArticle.title}\n\nThis article is currently empty.")
+            }
+
+            return NewsPost(
+                newsArticle.title,
+                newsArticle.thumbnail,
+                newsArticle.author,
+                newsArticle.timestamp!!,
+                content.readText()
+            )
+        }
     }
 
     fun toJson(): String {
-        return gson.toJson(this.toSimpleObject())
+        return Util.GSON.toJson(this)
     }
 
 
     override fun toString(): String {
-        return """
-            {
-                "title": "$title",
-                "thumbnail": "${thumbnail.toExternalForm()}",
-                "author": "$author",
-                "date": "$date",
-                "content": "${content.absolutePath}"
+        return this.toJson()
+    }
+
+
+    class NewsPostTypeAdapter : TypeAdapter<NewsPost>() {
+        override fun write(out: JsonWriter, value: NewsPost) {
+            out.beginObject()
+            out.name("title").value(value.title)
+            out.name("thumbnail").value(value.thumbnail)
+            out.name("author").value(value.author)
+            out.name("timestamp").value(value.timestamp)
+            out.name("content").value(value.content)
+            out.endObject()
+        }
+
+        override fun read(comingIn: JsonReader): NewsPost {
+            var title = "NULL"
+            var thumbnail = "NULL"
+            var author = "NULL"
+            var timestamp = 0L
+            var content = "NULL"
+
+            comingIn.beginObject()
+            while (comingIn.hasNext()) {
+                when (comingIn.nextName()) {
+                    "title" -> title = comingIn.nextString()
+                    "thumbnail" -> thumbnail = comingIn.nextString()
+                    "author" -> author = comingIn.nextString()
+                    "timestamp" -> timestamp = comingIn.nextLong()
+                    "content" -> content = comingIn.nextString()
+                }
             }
-        """.trimIndent()
+            comingIn.endObject()
+
+            return NewsPost(title, thumbnail, author, timestamp, content)
+        }
+
     }
 }
