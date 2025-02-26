@@ -8,12 +8,12 @@ object NewsManager {
 
     private val newsConfig: NewsConfig = ConfigManager.newsConfig
 
-    fun getNewsArticle(title: String): NewsArticle? {
-        return newsConfig.news[title]
+    fun getNewsArticle(id: String): NewsArticle? {
+        return newsConfig.news[id]
     }
 
-    fun getNewsPost(title: String): NewsPost? {
-        return newsConfig.news[title]?.let { NewsPost.fromNewsArticle(it) }
+    fun getNewsPost(id: String): NewsPost? {
+        return newsConfig.news[id]?.let { NewsPost.fromNewsArticle(id, it) }
     }
 
     fun getNewsArticles(): Map<String, NewsArticle> {
@@ -21,18 +21,18 @@ object NewsManager {
     }
 
     fun getNewsPosts(): Map<String, NewsPost> {
-        return newsConfig.news.mapValues { NewsPost.fromNewsArticle(it.value) }
+        return newsConfig.news.mapValues { NewsPost.fromNewsArticle(it.key, it.value) }
     }
 
     // Adding news articles programmatically
 
-    fun addNewsArticle(title: String, newsArticle: NewsArticle) {
-        newsConfig.news[title] = newsArticle
+    fun addNewsArticle(id: String, newsArticle: NewsArticle) {
+        newsConfig.news[id] = newsArticle
         newsConfig.save()
     }
 
-    fun removeNewsArticle(title: String) {
-        newsConfig.news.remove(title)
+    fun removeNewsArticle(id: String) {
+        newsConfig.news.remove(id)
         newsConfig.save()
     }
 }

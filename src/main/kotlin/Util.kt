@@ -2,7 +2,6 @@ package net.lumamc.web
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import net.lumamc.web.configuration.ConfigManager
 import net.lumamc.web.news.NewsPost
 import net.lumamc.web.news.NewsPost.NewsPostTypeAdapter
 import java.io.File
@@ -10,7 +9,7 @@ import java.nio.file.Path
 
 object Util {
 
-    public val GSON: Gson = GsonBuilder()
+    val GSON: Gson = GsonBuilder()
         .setPrettyPrinting()
         .registerTypeAdapter(NewsPost::class.java, NewsPostTypeAdapter())
         .create()
