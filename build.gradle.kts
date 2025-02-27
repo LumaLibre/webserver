@@ -1,6 +1,7 @@
 plugins {
     java
     kotlin("jvm") version "2.0.21"
+    id("com.gradleup.shadow") version "8.3.5"
 }
 
 group = "net.lumamc.web"
@@ -28,3 +29,27 @@ tasks.test {
 kotlin {
     jvmToolchain(21)
 }
+
+tasks {
+    shadowJar {
+        dependencies {
+
+        }
+
+        manifest {
+            attributes["Main-Class"] = "net.lumamc.web.MainKt"
+        }
+        archiveClassifier.set("")
+        // omit version
+        archiveVersion.set("")
+    }
+
+    jar {
+        enabled = false
+    }
+
+    build {
+        dependsOn(shadowJar)
+    }
+}
+

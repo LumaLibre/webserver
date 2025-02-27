@@ -67,7 +67,7 @@ class Server {
                     }
                 }
             }
-            .start(cfg.port)
+            .start(cfg.host, cfg.port)
 
     }
 }
