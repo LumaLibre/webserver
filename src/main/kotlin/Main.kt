@@ -1,7 +1,9 @@
 package net.lumamc.web
 
+import net.lumamc.web.console.ConsoleCommandManager
+
 
 fun main() {
-    val server = Server()
-    server.initServer()
+    Server.INSTANCE.initServer()
+    ConsoleCommandManager.INSTANCE.start()
 }

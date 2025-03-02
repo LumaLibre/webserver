@@ -12,6 +12,8 @@ class Server {
 
     companion object {
         private const val DISCORD_INVITE = "https://discord.com/invite/zMKEAhHHac"
+
+        val INSTANCE = Server()
     }
 
     private lateinit var internalServer: Javalin
@@ -69,5 +71,9 @@ class Server {
             }
             .start(cfg.host, cfg.port)
 
+    }
+
+    fun stopServer() {
+        internalServer.stop()
     }
 }
