@@ -38,7 +38,6 @@ class Server {
                 }
             }
             config.jsonMapper(gsonMapper)
-            // Serve all files in your static directory
             config.staticFiles.add(cfg.staticFilesDirectory, Location.EXTERNAL)
         }
             // Handle discord redirects here instead of in the frontend

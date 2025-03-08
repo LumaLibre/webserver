@@ -1,14 +1,8 @@
-import java.nio.file.Path
-
 plugins {
     java
     kotlin("jvm") version "2.0.21"
     id("com.gradleup.shadow") version "8.3.5"
-    //id("dev.jsinco.pterodactyldeploy") version "1.2-SNAPSHOT"
 }
-
-group = "net.lumamc.web"
-version = "1.0-SNAPSHOT"
 
 repositories {
     mavenCentral()
@@ -54,6 +48,5 @@ tasks {
 
     build {
         dependsOn(shadowJar)
-        //finalizedBy(pterodactylDeploy)
     }
 }
