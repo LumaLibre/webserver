@@ -17,12 +17,10 @@ dependencies {
 
     implementation("com.fasterxml.jackson.core:jackson-databind:2.17.2")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.17.2")
-    testImplementation(kotlin("test"))
+
+    implementation("net.dv8tion:JDA:5.0.0-beta.24")
 }
 
-tasks.test {
-    useJUnitPlatform()
-}
 kotlin {
     jvmToolchain(21)
 }
