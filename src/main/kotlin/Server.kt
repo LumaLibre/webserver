@@ -12,7 +12,6 @@ class Server {
 
     companion object {
         private const val DISCORD_INVITE = "https://discord.com/invite/zMKEAhHHac"
-        private const val MOJANG_API = "https://api.minecraftservices.com/"
 
         val INSTANCE = Server()
     }
