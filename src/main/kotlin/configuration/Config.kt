@@ -23,4 +23,8 @@ class Config : OkaeriConfig() {
             }
             return asString
         }
+
+    var discordNewsChannelId: Long = -1
+    var embedsOnly: Boolean = true
+    var defaultAuthor = "Jsinco"
 }
